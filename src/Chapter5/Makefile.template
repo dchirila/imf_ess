@@ -1,0 +1,31 @@
+# Simple Makefile-template
+# NOTE: hash-characters indicate comments
+
+# Several ways of assigning values to variables exist...
+# - "immediate" assignment (with ':=' operator)
+var1 := value1
+# - "lazy" assignment, evaluated only when the value stored in the variable is
+#   actually needed (with '=' operator)
+var2 = value2
+# . . .
+
+# Rules and their commands
+# * the block of commands will be executed for updating each of the targets
+# * commands are indented with <TAB>-characters (indenting with spaces is,
+#   unfortunately, NOT equivalent!)
+
+# - example rule #1: more than one target
+target1 target2: target12_prereq1 target12_prereq2
+	command1_target12
+	command2_target12
+
+# - example rule #2: no commands-block
+target3: target3_prereq1 target3_prereq2
+
+# - example rule #3: splitting complex rules - BUT only one sub-rule can have
+# commands associated with it (there should only be one way to make a target)
+target4: target4_prereq1
+target4: target4_prereq2
+	command1_target4
+	command2_target4
+	command3_target4

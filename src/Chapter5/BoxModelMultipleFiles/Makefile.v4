@@ -1,0 +1,56 @@
+# File: Makefile.v4
+# Purpose: 4th (and final) version of the Makefile for the example in
+#          Section 5.1 of the book; relative to v3, here we:
+#          - re-use some of the intrinsic rules, to avoid hard-coding of linking
+#            and compilation commands in the rules
+#          - add PHONY targets, to clean-up automatically-generated files in our
+#            project
+#          - express in a more compact way the dependency on the 'NumericKinds'
+#            module; in v3, we expressed this by manually listing all
+#            object-files EXCEPT 'NumericKinds.o' (lines 19-20 of Makefile.v3);
+#            here, we do this in an automated fashion, using an intrinsic
+#            function of GNU Make ('filter-out'), to exclude 'NumericKinds.o'
+#            itself from the list of objects (to avoid introducing a circular
+#            dependency)
+#          - add default definitions for 'FC' (the Fortran compiler) and
+#            'FCFLAGS' (options for the Fortran compiler); users can still
+#            override these easily, at the command-line, for example:
+#            make FC='ifort'
+#            OR
+#            make FCFLAGS='-O3'
+
+srcs := box_model_euler_main.f90 ModelState_class.f90 \
+       ModelConstants.f90 PhysicsConstants.f90 \
+       GeomUtils.f90 NumericKinds.f90
+objs := $(srcs:.f90=.o)
+prog := box_model_euler
+
+$(prog): $(objs)
+	$(LINK.f) $^ $(LOADLIBES) $(LDLIBS) $(OUTPUT_OPTION)
+
+%.o: %.f90
+	$(COMPILE.f) $< $(OUTPUT_OPTION)
+
+clean:
+	-$(RM) *.mod *.o $(prog)
+
+.PHONY: clean
+
+# additional dependencies
+$(filter-out NumericKinds.o, $(objs)): NumericKinds.o
+
+box_model_euler_main.o: PhysicsConstants.o ModelConstants.o
+box_model_euler_main.o: ModelState_class.o
+
+ModelConstants.o GeomUtils.o: PhysicsConstants.o
+ModelState_class.o: GeomUtils.o
+
+# WARNING: next two values are specific to the GNU compiler -- readers should
+#          adjust this if they are using another compiler/compiler-version.
+FC := gfortran-4.8
+FFLAGS := -O2 -std=f2008ts -pedantic -Wall
+
+# If using the Intel Fortran compiler (ifort) on Linux, readers can comment-out
+# the two gfortran-specific lines above, and un-comment the two lines below.
+#FC := ifort
+#FFLAGS := -O2 -std08 -diag-enable warn -warn all -nogen-interface

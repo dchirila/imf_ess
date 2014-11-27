@@ -1,0 +1,12 @@
+! File: demo_namelist_read.nml
+! Purpose: Example namelist-file, to be used with the program
+!          'demo_namelist.f90'
+&my_namelist
+    ! Comments can be added on distinct lines...
+    myPos%mLon   = 9.72,    ! ...or at the end of a line.
+    myPos%mLat   = 52.37,
+    array        = 6*9.1,   ! shorthand-notation for constant
+                            ! sections in an array.
+    array(1)     = 2.9 ! overrides previous specification for
+                       ! first array element
+/

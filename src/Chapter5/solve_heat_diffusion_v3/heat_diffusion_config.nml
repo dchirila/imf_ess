@@ -1,0 +1,15 @@
+&heat_diffusion_ade_params
+    ! Physical parameters.
+    diffusivity  = 1.15e-6, ! thermal-diffusivity coeff (m^2/s)
+    ! NOTE: commenting-out line below will cause default-value to be picked 
+    sideLength = 10. ! length of square-side (m)
+
+    ! Constant-temperature boundary conditions.
+    tempA = 100.,
+    tempB =  75.,
+    tempC =  50.,
+    tempD =  25.,
+
+    ! Numerical parameters.
+    nX = 300
+/

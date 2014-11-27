@@ -1,0 +1,26 @@
+# File: Makefile.v3
+# Purpose: 3rd version of the Makefile for the example in Section 5.1 of
+#          the book; relative to v2, we use here three variables ('srcs',
+#          'objs' and 'prog'), to make the first rule more readable.
+
+srcs := box_model_euler_main.f90 ModelState_class.f90 \
+	ModelConstants.f90 PhysicsConstants.f90 \
+	GeomUtils.f90 NumericKinds.f90
+objs := $(srcs:.f90=.o)
+prog := box_model_euler
+
+$(prog): $(objs)
+	gfortran -o $@ $^
+
+%.o: %.f90
+	gfortran -c $<
+
+# additional dependencies
+box_model_euler_main.o ModelState_class.o: NumericKinds.o
+ModelConstants.o PhysicsConstants.o GeomUtils.o: NumericKinds.o
+
+box_model_euler_main.o: PhysicsConstants.o ModelConstants.o
+box_model_euler_main.o: ModelState_class.o
+
+ModelConstants.o GeomUtils.o: PhysicsConstants.o
+ModelState_class.o: GeomUtils.o

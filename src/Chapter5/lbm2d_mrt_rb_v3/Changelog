@@ -1,0 +1,12 @@
+(changes relative to V2)
+  Makefile:
+  - Activated support for OpenMP
+  - Added variables for 'ifort' support, to perform multi-threaded profiling of
+	V3 (this version), in the interest of improving the quality of the
+	parallelization (see V4).
+
+  RBenardSimulation_class.f90:
+  - TODO
+
+  MrtSolverBoussinesq2D_class.f90:
+  - TODO
